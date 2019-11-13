@@ -26,7 +26,8 @@ SEED = 111999999  #111999999
 M = 10
 Z_DoE = 12
 Z_VM = 50 #40 60
-Nz_RUN = 15
+Nz_RUN_1 = 15
+Nz_RUN_2 = 20
 
 v_PLS = 0.6
 
@@ -55,24 +56,28 @@ def main():
     #     p1_mape_Queue.append(mape_sum / M)
 
     p1_q1_mape_Queue = []
+    p1_q1_mape_Queue_temp = []
 
     # metrology 마다 보여주는 MAPE 값이 의미가 없다.
-    for z in np.arange(Nz_RUN, Z_VM, 1):
+    for z in np.arange(Nz_RUN_1, Z_VM, 1):
         act = y_act[((z + 1) * M) - 1][0]
         prd = y_prd[((z + 1) * M) - 1][0]
         mape = fdh_graph.mean_absolute_percentage_error(z + 1, act, prd)
         if z >= 15 and z < 20:
             print('z = ', z, ', act = ', act, ', prd = ', prd, ', ez = ', np.abs(act - prd), ', MAPE = ', mape)
-        p1_q1_mape_Queue.append(mape)
+            p1_q1_mape_Queue_temp.append(np.abs(act - prd))
+        else:
+            p1_q1_mape_Queue.append(mape)
 
-    print('Process-1 q1 Every Metrology MAPE After 15 Lot : {0:.2f}%'.format(np.mean(p1_q1_mape_Queue)))
+    print('Process-1 q1 Actual Metrology MAPE between 5 Lots (15 ~ 20 Lots) : {0:.2f}'.format(np.mean(p1_q1_mape_Queue_temp)))
+    print('Process-1 q1 Every Metrology MAPE After 20 Lot : {0:.2f}%'.format(np.mean(p1_q1_mape_Queue)))
     p1_q1_mape_Queue = []
 
-    for i in np.arange(Nz_RUN * M, Z_VM * M, 1):
+    for i in np.arange(Nz_RUN_2 * M, Z_VM * M, 1):
         mape = fdh_graph.mean_absolute_percentage_error(i + 1, y_act[i][0], y_prd[i][0])
         p1_q1_mape_Queue.append(mape)
 
-    print('Process-1 q1 All MAPE After 15 Lot : {0:.2f}%'.format(np.mean(p1_q1_mape_Queue)))
+    print('Process-1 q1 All MAPE After 20 Lot : {0:.2f}%'.format(np.mean(p1_q1_mape_Queue)))
 
     # np.savetxt("output/noise_mape_Queue.csv", p1_mape_Queue, delimiter=",", fmt="%.4f")
     # np.savetxt("output/abNormal_VM_Output.csv", VM_Output, delimiter=",", fmt="%.4f")
