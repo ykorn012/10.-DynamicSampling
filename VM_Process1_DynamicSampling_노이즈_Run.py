@@ -75,23 +75,22 @@ def main():
     #fdh_graph.plt_show5_1(noise_ez_run_out, ez_run_out, N, M, dM, S1, type=1)  #60 Metrology Runs
     fdh_graph.plt_show5_1(noise_ez_run_out, ez_run_out, N, M, dM, S1, type=2)  # 100 Metrology Runs
 
+    # p1_q1_mape_Queue = []
+
+    # #metrology 마다 보여주는 MAPE 값이 의미가 없다. ==> 로직 고쳐야 함.. 40 runs가 아니라 60 Runs, 80 Runs 변경 계산 필요
+    # for z in np.arange(Nz_RUN, old_N, 1):
+    #     mape = fdh_graph.mean_absolute_percentage_error(z + 1, y_act[((z + 1) * M) - 1][0], y_prd[((z + 1) * M) - 1][0])
+    #     p1_q1_mape_Queue.append(mape)
+    #
+    # print('Process-1 q1 Every Metrology MAPE After 15 Lot : {0:.2f}%'.format(np.mean(p1_q1_mape_Queue)))
+
     p1_q1_mape_Queue = []
 
-    #metrology 마다 보여주는 MAPE 값이 의미가 없다. ==> 로직 고쳐야 함.. 40 runs가 아니라 60 Runs, 80 Runs 변경 계산 필요
-    for z in np.arange(Nz_RUN, old_N, 1):
-        mape = fdh_graph.mean_absolute_percentage_error(z + 1, y_act[((z + 1) * M) - 1][0], y_prd[((z + 1) * M) - 1][0])
-        p1_q1_mape_Queue.append(mape)
-
-    print('Process-1 q1 Every Metrology MAPE After 15 Lot : {0:.2f}%'.format(np.mean(p1_q1_mape_Queue)))
-    p1_q1_mape_Queue = []
-
-    for i in np.arange(Nz_RUN * M, N, 1):
+    for i in np.arange(S1  * M, N, 1):
         mape = fdh_graph.mean_absolute_percentage_error(i + 1, y_act[i][0], y_prd[i][0])
-        if z >= 15 and z < 20:
-            print('z = ', z, ', MAPE = ', mape)
         p1_q1_mape_Queue.append(mape)
 
-    print('Process-1 q1 All MAPE After 15 Lot : {0:.2f}%'.format(np.mean(p1_q1_mape_Queue)))
+    print('Process-1 q1 All MAPE After 20 Lot : {0:.2f}%'.format(np.mean(p1_q1_mape_Queue)))
 
 if __name__ == "__main__":
     main()
